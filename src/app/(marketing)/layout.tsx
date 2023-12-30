@@ -5,7 +5,7 @@ type Props = {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: Props) {
+export default function MarketingLayout({ children }: Props) {
   return (
     <div className="h-full bg-slate-100 dark:bg-slate-800">
       <Navbar />
