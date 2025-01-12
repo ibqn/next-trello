@@ -10,11 +10,7 @@ import { deleteCookie, getCookie, setCookie } from "hono/cookie"
 import { validateSessionToken } from "database/src/lucia"
 import { sessionCookieName, getSessionCookieOptions } from "database/src/cookie"
 import { authRoute } from "./routes/auth"
-import { courseRoute } from "./routes/courses"
 import { uploadRoute, fileRoute } from "./routes/uploads"
-import { categoryRoutes } from "./routes/categories"
-import { attachmentRoute } from "./routes/attachments"
-import { chapterRoute } from "./routes/chapters"
 
 const app = new Hono<Context>()
 
