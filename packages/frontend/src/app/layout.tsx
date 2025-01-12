@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { siteConfig } from "@/config"
+import { ReactNode } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>{children}</body>
     </html>
   )
