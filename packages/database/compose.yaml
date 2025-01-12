@@ -1,4 +1,4 @@
-name: next-lms
+name: next-trello
 
 services:
   postgres:
@@ -11,7 +11,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=drizzle
       - POSTGRES_USER=drizzle
-      - POSTGRES_DB=next-lms
+      - POSTGRES_DB=next-trello
 
   adminer:
     image: adminer
