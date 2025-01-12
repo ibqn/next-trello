@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export default function MarketingPage() {
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex grow flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center">
         <div className="mb-4 flex flex-row gap-x-2 rounded-full border bg-amber-100 p-4 uppercase text-amber-700 shadow-sm">
           <Medal className="h-6 w-6" />

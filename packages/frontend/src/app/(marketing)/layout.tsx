@@ -1,4 +1,5 @@
-import { Footer, Navbar } from "@/components/marketing"
+import { Footer } from "@/components/marketing/footer"
+import { Navbar } from "@/components/marketing/navbar"
 
 type Props = {
   children: React.ReactNode
@@ -6,7 +7,7 @@ type Props = {
 
 export default function MarketingLayout({ children }: Props) {
   return (
-    <div className="h-full bg-slate-100 dark:bg-slate-800">
+    <div className="flex grow flex-col bg-slate-100 dark:bg-slate-800">
       <Navbar />
       <main className="bg-slate-100 pb-20 pt-40 dark:bg-slate-800">{children}</main>
       <Footer />

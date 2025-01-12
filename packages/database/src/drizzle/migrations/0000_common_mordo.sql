@@ -1,4 +1,4 @@
-CREATE SCHEMA "drizzle";
+CREATE SCHEMA if not exists "drizzle";
 --> statement-breakpoint
 CREATE TABLE "drizzle"."session" (
 	"id" text PRIMARY KEY NOT NULL,

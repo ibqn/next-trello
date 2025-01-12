@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/platform"
+import { Navbar } from "@/components/platform/navbar"
 
 type Props = {
   children: React.ReactNode
