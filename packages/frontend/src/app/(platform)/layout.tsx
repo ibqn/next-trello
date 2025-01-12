@@ -1,9 +1,15 @@
-import { ClerkProvider } from "@clerk/nextjs"
+import { validateRequest } from "@/auth"
+import { redirect } from "next/navigation"
+import { ReactNode } from "react"
 
 type Props = {
-  children: React.ReactNode
+  children: ReactNode
 }
 
-export default function PlatformLayout({ children }: Props) {
-  return <ClerkProvider>{children}</ClerkProvider>
+export default async function PlatformLayout({ children }: Props) {
+  const { user } = await validateRequest()
+  if (!user) {
+    return redirect("/sign-in")
+  }
+  return children
 }
