@@ -1,4 +1,4 @@
-import { integer, primaryKey, text, uuid } from "drizzle-orm/pg-core"
+import { primaryKey, text, uuid } from "drizzle-orm/pg-core"
 import { userTable } from "./auth"
 import { schema } from "./schema"
 import { relations } from "drizzle-orm"
