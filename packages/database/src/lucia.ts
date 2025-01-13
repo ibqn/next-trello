@@ -19,12 +19,22 @@ export async function createSession(
   userId: string
 ): Promise<Session> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
-  const session: Session = {
-    id: sessionId,
-    userId,
-    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-  }
-  await db.insert(sessionTable).values(session)
+
+  const [session] = await db
+    .insert(sessionTable)
+    .values({
+      id: sessionId,
+      userId,
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+    })
+    .returning({
+      id: sessionTable.id,
+      userId: sessionTable.userId,
+      createdAt: sessionTable.createdAt,
+      updatedAt: sessionTable.updatedAt,
+      expiresAt: sessionTable.expiresAt,
+    })
+
   return session
 }
 
@@ -37,7 +47,7 @@ export async function validateSessionToken(
     where: ({ id }, { eq }) => eq(id, sessionId),
     with: {
       user: {
-        columns: { id: true, username: true, createdAt: true },
+        columns: { id: true, username: true, createdAt: true, updatedAt: true },
       },
     },
   })
@@ -50,6 +60,9 @@ export async function validateSessionToken(
     id: sessionData.id,
     userId: sessionData.userId,
     expiresAt: sessionData.expiresAt,
+
+    createdAt: sessionData.createdAt,
+    updatedAt: sessionData.updatedAt,
   }
   const { user } = sessionData
 
