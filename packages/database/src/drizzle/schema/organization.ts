@@ -24,7 +24,7 @@ export const userOrganizationTable = schema.table(
     userId: uuid("user_id")
       .notNull()
       .references(() => userTable.id),
-    organizationId: integer("organization_id")
+    organizationId: uuid("organization_id")
       .notNull()
       .references(() => organizationTable.id),
 
