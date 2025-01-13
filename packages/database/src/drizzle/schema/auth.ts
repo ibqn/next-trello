@@ -3,6 +3,7 @@ import { relations, type InferSelectModel } from "drizzle-orm"
 import { schema } from "./schema"
 import { userOrganizationTable } from "./organization"
 import { lifecycleDates } from "./utils"
+import { userRoleTable } from "./roles"
 
 export const userTable = schema.table("user", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -14,6 +15,7 @@ export const userTable = schema.table("user", {
 
 export const userRelations = relations(userTable, ({ many }) => ({
   organizations: many(userOrganizationTable),
+  roles: many(userRoleTable),
 }))
 
 export const sessionTable = schema.table("session", {
