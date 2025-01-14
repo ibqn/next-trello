@@ -1,12 +1,12 @@
 import { primaryKey, text, uuid } from "drizzle-orm/pg-core"
 import { userTable } from "./auth"
 import { schema } from "./schema"
-import { relations } from "drizzle-orm"
+import { relations, type InferSelectModel } from "drizzle-orm"
 import { lifecycleDates } from "./utils"
 
 export const organizationTable = schema.table("organization", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull().unique(),
+  name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
 
   ...lifecycleDates,
@@ -33,3 +33,5 @@ export const userOrganizationTable = schema.table(
   },
   (t) => [primaryKey({ columns: [t.userId, t.organizationId] })]
 )
+
+export type Organization = InferSelectModel<typeof organizationTable>

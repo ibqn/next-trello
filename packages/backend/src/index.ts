@@ -11,6 +11,7 @@ import { validateSessionToken } from "database/src/lucia"
 import { sessionCookieName, getSessionCookieOptions } from "database/src/cookie"
 import { authRoute } from "./routes/auth"
 import { uploadRoute, fileRoute } from "./routes/uploads"
+import { organizationRoute } from "./routes/organization"
 
 const app = new Hono<Context>()
 
@@ -77,6 +78,7 @@ export const routes = app
   .basePath("/api")
   .route("/auth", authRoute)
   .route("/uploads", uploadRoute)
+  .route("/organization", organizationRoute)
 
 const port = 3333
 console.log(`Server is running on http://localhost:${port}`)

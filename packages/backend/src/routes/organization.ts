@@ -1,0 +1,33 @@
+import type { Context } from "../utils/context"
+import { Hono } from "hono"
+import { zValidator } from "@hono/zod-validator"
+import type { SuccessResponse } from "database/src/types"
+import { HTTPException } from "hono/http-exception"
+import { signedIn } from "../middleware/signed-in"
+import { organizationSchema } from "database/src/validators/organization"
+import type { User } from "database/src/drizzle/schema/auth"
+import { createOrganization } from "database/src/queries/organization"
+import type { Organization } from "database/src/drizzle/schema/organization"
+
+const organizationRoute = new Hono<Context>().post(
+  "/",
+  signedIn,
+  zValidator("json", organizationSchema),
+  async (c) => {
+    const orgData = c.req.valid("json")
+    const user = c.get("user") as User
+
+    const organization = await createOrganization({ ...orgData, user })
+
+    if (!organization) {
+      throw new HTTPException(409, { message: "Failed to create organization" })
+    }
+
+    return c.json<SuccessResponse<Organization>>(
+      { success: true, message: "Organization created", data: organization },
+      201
+    )
+  }
+)
+
+export { organizationRoute }

@@ -6,29 +6,35 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FormError } from "./form-error"
 import { FormSuccess } from "./form-success"
 import Link from "next/link"
 import { useMutation } from "@tanstack/react-query"
 import { getQueryClient } from "@/lib/query-client"
-import { postSignin } from "@/api/auth"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
-import { ErrorResponse, SuccessResponse } from "database/src/types"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { ApiResponse, ErrorResponse } from "database/src/types"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { postOrganization } from "@/api/organization"
+import { slugify } from "@/utils/slugify"
 
 export const CreateOrgForm = () => {
-  const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
+  const [response, setResponse] = useState<ApiResponse | null>(null)
 
   const form = useForm<OrganizationSchema>({
     resolver: zodResolver(organizationSchema),
-    defaultValues: {
-      name: "",
-      slug: "",
-    },
+    defaultValues: { name: "", slug: "" },
   })
+
+  const name = form.watch("name")
+
+  useEffect(() => {
+    if (name) {
+      form.setValue("slug", slugify(name))
+    }
+  }, [name, form])
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -36,31 +42,31 @@ export const CreateOrgForm = () => {
 
   const queryClient = getQueryClient()
 
-  const { mutate: signin } = useMutation({
-    mutationFn: postSignin,
+  const { mutate: createOrganization } = useMutation({
+    mutationFn: postOrganization,
     onSuccess: async () => {
-      console.log("Signin success")
-      setResponse({ success: true, message: "Welcome back" })
+      console.log("created organization")
+      setResponse({ success: true, message: "Organization created" })
 
-      toast("Sign in success", { description: "Welcome back" })
+      toast("Create organization Success", { description: "Organization created" })
       await queryClient.invalidateQueries({ queryKey: ["user"] })
       router.push(redirect)
     },
     onError: (error) => {
-      let message = "Signin failed"
+      let message = "Failed to create organization"
 
       if (error instanceof AxiosError) {
         const response = error.response?.data as ErrorResponse
         message = response.error
       }
       setResponse({ success: false, error: message })
-      toast("Sign in failed", { description: message })
+      toast("Create organization failure", { description: message })
     },
   })
 
   const handleSubmit = form.handleSubmit(async (data) => {
     console.log(data)
-    signin(data)
+    createOrganization(data)
   })
 
   const isDisabled = form.formState.isSubmitting
