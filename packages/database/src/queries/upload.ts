@@ -43,6 +43,7 @@ export const getUpload = async ({ id: uploadId }: GetUploadOptions) => {
           username: true,
           id: true,
           createdAt: true,
+          updatedAt: true,
         },
       },
     },
