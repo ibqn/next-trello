@@ -27,10 +27,10 @@ export const UserButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar>
+        <Avatar className="size-9">
           <AvatarImage src={undefined} />
-          <AvatarFallback className="bg-gradient-120 from-indigo-6 to-cyan-3">
-            <User size={18} />
+          <AvatarFallback className="bg-gradient-to-r from-[#68DBFF] to-[#FF7917]">
+            <User size={19} />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

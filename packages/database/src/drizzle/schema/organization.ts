@@ -7,6 +7,7 @@ import { lifecycleDates } from "./utils"
 export const organizationTable = schema.table("organization", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
+  slug: text("slug").notNull().unique(),
 
   ...lifecycleDates,
 })
