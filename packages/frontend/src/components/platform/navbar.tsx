@@ -12,7 +12,7 @@ export const Navbar = () => {
           <Logo />
         </div>
 
-        <Button size="sm" className="hidden h-auto rounded-sm px-2 py-1.5 md:block">
+        <Button size="sm" className="hidden h-auto rounded-sm px-3 py-1.5 md:block">
           Create
         </Button>
 
