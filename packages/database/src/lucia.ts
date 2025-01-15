@@ -54,6 +54,17 @@ export async function validateSessionToken(
           updatedAt: true,
           organizationId: true,
         },
+        with: {
+          organization: {
+            columns: {
+              id: true,
+              name: true,
+              slug: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        },
       },
     },
   })

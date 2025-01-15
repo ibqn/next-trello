@@ -2,6 +2,7 @@ import { Logo } from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { UserButton } from "@/components/auth/user-button"
+import { OrganizationSwitcher } from "@/components/auth/org-switcher"
 
 export const Navbar = () => {
   return (
@@ -19,7 +20,8 @@ export const Navbar = () => {
           <Plus className="h-4 w-4" />
         </Button>
 
-        <div className="ml-auto flex items-center gap-x-2">
+        <div className="ml-auto flex items-center gap-4">
+          <OrganizationSwitcher />
           <UserButton />
         </div>
       </div>

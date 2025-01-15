@@ -1,7 +1,11 @@
 import { text, timestamp, uuid } from "drizzle-orm/pg-core"
 import { relations, type InferSelectModel } from "drizzle-orm"
 import { schema } from "./schema"
-import { organizationTable, userOrganizationTable } from "./organization"
+import {
+  organizationTable,
+  userOrganizationTable,
+  type Organization,
+} from "./organization"
 import { lifecycleDates } from "./utils"
 import { userRoleTable } from "./roles"
 
@@ -44,5 +48,7 @@ export const sessionRelations = relations(sessionTable, ({ one }) => ({
   }),
 }))
 
-export type User = Omit<InferSelectModel<typeof userTable>, "passwordHash">
+export type User = Omit<InferSelectModel<typeof userTable>, "passwordHash"> & {
+  organization?: Organization | null
+}
 export type Session = InferSelectModel<typeof sessionTable>
