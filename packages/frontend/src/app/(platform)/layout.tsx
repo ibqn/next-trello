@@ -11,5 +11,10 @@ export default async function PlatformLayout({ children }: Props) {
   if (!user) {
     return redirect("/sign-in")
   }
+
+  if (!user.organizationId) {
+    return redirect("/select-org")
+  }
+
   return children
 }

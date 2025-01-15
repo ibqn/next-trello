@@ -1,34 +1,20 @@
 "use client"
 
-import { useForm } from "react-hook-form"
-import { CardWrapper } from "./card-wrapper"
-import { type SigninSchema, signinSchema } from "database/src/validators/signin"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { FormError } from "./form-error"
-import { FormSuccess } from "./form-success"
 import Link from "next/link"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { getQueryClient } from "@/lib/query-client"
-import { postSignin } from "@/api/auth"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
 import { ErrorResponse, SuccessResponse } from "database/src/types"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { organizationListQueryOptions } from "@/api/organization"
+import { ArrowRight, BuildingIcon } from "lucide-react"
 
-export const SignInForm = () => {
+export const SelectOrgForm = () => {
   const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
-
-  const form = useForm<SigninSchema>({
-    resolver: zodResolver(signinSchema),
-    defaultValues: {
-      username: "",
-      password: "",
-    },
-  })
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -36,93 +22,38 @@ export const SignInForm = () => {
 
   const queryClient = getQueryClient()
 
-  const { mutate: signin } = useMutation({
-    mutationFn: postSignin,
-    onSuccess: async () => {
-      console.log("Signin success")
-      setResponse({ success: true, message: "Welcome back" })
-
-      toast("Sign in success", { description: "Welcome back" })
-      await queryClient.invalidateQueries({ queryKey: ["user"] })
-      router.push(redirect)
-    },
-    onError: (error) => {
-      let message = "Signin failed"
-
-      if (error instanceof AxiosError) {
-        const response = error.response?.data as ErrorResponse
-        message = response.error
-      }
-      setResponse({ success: false, error: message })
-      toast("Sign in failed", { description: message })
-    },
-  })
-
-  const handleSubmit = form.handleSubmit(async (data) => {
-    console.log(data)
-    signin(data)
-  })
-
-  const isDisabled = form.formState.isSubmitting
+  const { data: organizations } = useQuery(organizationListQueryOptions())
 
   return (
-    <CardWrapper headerLabel="Welcome back" backButtonLabel="Don't have an account?" backButtonHref="/sign-up">
-      <Form {...form}>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      autoComplete="username"
-                      placeholder="Username"
-                      disabled={isDisabled}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <Card className="w-full max-w-sm">
+      <CardHeader className="text-lg font-semibold">
+        <CardTitle>Select organization</CardTitle>
+        <CardDescription>Choose an organization to continue</CardDescription>
+      </CardHeader>
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      autoComplete="current-password"
-                      placeholder="******"
-                      disabled={isDisabled}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      <CardContent className="flex flex-col items-start gap-4">
+        {organizations?.map((org) => (
+          <div key={org.id} className="flex w-full items-center justify-between gap-2">
+            <Link href={`/organization/${org.slug}`} className="flex items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-md bg-gray-200">
+                <BuildingIcon className="size-6" />
+              </div>
+
+              <span className="font-semibold capitalize">{org.name}</span>
+            </Link>
+            <Link href={`/organization/${org.slug}`} className="flex">
+              <ArrowRight className="size-4" />
+            </Link>
           </div>
+        )) ?? <div className="text-sm italic text-muted-foreground">No organizations yet found</div>}
 
-          {response?.success && <FormSuccess message={response.message} />}
-          {response?.success === false && <FormError message={response.error} />}
-
-          <Button type="submit" className="w-full" disabled={isDisabled}>
-            Sign In
-          </Button>
-        </form>
-      </Form>
-
-      <Button size="sm" variant="link" asChild className="px-0 font-normal">
-        <Link href="/password-reset">Forgot password?</Link>
-      </Button>
-    </CardWrapper>
+        <div className="relative w-full self-center text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+          <span className="relative z-10 bg-background px-2 text-muted-foreground">Or continue with</span>
+        </div>
+        <Button size="sm" variant="link" asChild className="px-0 font-normal">
+          <Link href="/create-org">Create organization</Link>
+        </Button>
+      </CardContent>
+    </Card>
   )
 }

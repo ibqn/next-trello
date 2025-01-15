@@ -6,14 +6,16 @@ import { HTTPException } from "hono/http-exception"
 import { signedIn } from "../middleware/signed-in"
 import { organizationSchema } from "database/src/validators/organization"
 import type { User } from "database/src/drizzle/schema/auth"
-import { createOrganization } from "database/src/queries/organization"
+import {
+  createOrganization,
+  getOrganizationBySlug,
+  getOrganizationsByUserId,
+} from "database/src/queries/organization"
 import type { Organization } from "database/src/drizzle/schema/organization"
+import { paramIdSchema } from "database/src/validators/param"
 
-const organizationRoute = new Hono<Context>().post(
-  "/",
-  signedIn,
-  zValidator("json", organizationSchema),
-  async (c) => {
+const organizationRoute = new Hono<Context>()
+  .post("/", signedIn, zValidator("json", organizationSchema), async (c) => {
     const orgData = c.req.valid("json")
     const user = c.get("user") as User
 
@@ -27,7 +29,32 @@ const organizationRoute = new Hono<Context>().post(
       { success: true, message: "Organization created", data: organization },
       201
     )
-  }
-)
+  })
+  .get("/", signedIn, async (c) => {
+    const user = c.get("user") as User
+
+    const organizations = await getOrganizationsByUserId(user.id)
+
+    return c.json<SuccessResponse<Organization[]>>({
+      success: true,
+      message: "Organization list retrieved",
+      data: organizations,
+    })
+  })
+  .get("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const { id: slug } = c.req.valid("param")
+
+    const organization = await getOrganizationBySlug(slug)
+
+    if (!organization) {
+      throw new HTTPException(404, { message: "Organization not found" })
+    }
+
+    return c.json<SuccessResponse<Organization>>({
+      success: true,
+      message: "Organization found",
+      data: organization,
+    })
+  })
 
 export { organizationRoute }
