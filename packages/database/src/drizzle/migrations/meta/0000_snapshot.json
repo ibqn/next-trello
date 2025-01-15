@@ -1,5 +1,5 @@
 {
-  "id": "fea6ea69-b67c-49eb-9e14-bd09e46f2331",
+  "id": "b8deb1cd-e635-4b11-8140-4091617fc835",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -135,6 +135,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -154,11 +160,11 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "organization_name_unique": {
-          "name": "organization_name_unique",
+        "organization_slug_unique": {
+          "name": "organization_slug_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "name"
+            "slug"
           ]
         }
       },

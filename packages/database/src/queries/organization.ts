@@ -4,8 +4,9 @@ import {
   type Organization,
 } from "../drizzle/schema/organization"
 import { db } from "../drizzle/db"
-import type { User } from "../drizzle/schema/auth"
+import { userTable, type User } from "../drizzle/schema/auth"
 import type { OrganizationSchema } from "../validators/organization"
+import { eq } from "drizzle-orm"
 
 type CreateOrganizationOptions = OrganizationSchema & {
   user: User
@@ -40,6 +41,14 @@ export const createOrganization = async ({
         userId: userOrganizationTable.userId,
         createdAt: userOrganizationTable.createdAt,
         updatedAt: userOrganizationTable.updatedAt,
+      })
+
+    const [userUpdate] = await trx
+      .update(userTable)
+      .set({ organizationId: organization.id })
+      .where(eq(userTable.id, user.id))
+      .returning({
+        id: userTable.id,
       })
 
     return organization satisfies Organization as Organization

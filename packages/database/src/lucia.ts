@@ -47,7 +47,13 @@ export async function validateSessionToken(
     where: ({ id }, { eq }) => eq(id, sessionId),
     with: {
       user: {
-        columns: { id: true, username: true, createdAt: true, updatedAt: true },
+        columns: {
+          id: true,
+          username: true,
+          createdAt: true,
+          updatedAt: true,
+          organizationId: true,
+        },
       },
     },
   })

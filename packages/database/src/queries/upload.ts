@@ -44,6 +44,7 @@ export const getUpload = async ({ id: uploadId }: GetUploadOptions) => {
           id: true,
           createdAt: true,
           updatedAt: true,
+          organizationId: true,
         },
       },
     },

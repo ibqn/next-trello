@@ -1,19 +1,26 @@
 import { text, timestamp, uuid } from "drizzle-orm/pg-core"
 import { relations, type InferSelectModel } from "drizzle-orm"
 import { schema } from "./schema"
-import { userOrganizationTable } from "./organization"
+import { organizationTable, userOrganizationTable } from "./organization"
 import { lifecycleDates } from "./utils"
 import { userRoleTable } from "./roles"
 
 export const userTable = schema.table("user", {
   id: uuid("id").primaryKey().defaultRandom(),
   username: text("username").notNull().unique(),
+  organizationId: uuid("organization_id").references(
+    () => organizationTable.id
+  ),
   passwordHash: text("password_hash").notNull(),
 
   ...lifecycleDates,
 })
 
-export const userRelations = relations(userTable, ({ many }) => ({
+export const userRelations = relations(userTable, ({ one, many }) => ({
+  organization: one(organizationTable, {
+    fields: [userTable.organizationId],
+    references: [organizationTable.id],
+  }),
   organizations: many(userOrganizationTable),
   roles: many(userRoleTable),
 }))

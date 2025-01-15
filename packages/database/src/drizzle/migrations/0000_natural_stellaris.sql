@@ -20,9 +20,10 @@ CREATE TABLE "drizzle"."user" (
 CREATE TABLE "drizzle"."organization" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
+	"slug" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now(),
-	CONSTRAINT "organization_name_unique" UNIQUE("name")
+	CONSTRAINT "organization_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
 CREATE TABLE "drizzle"."user_organization" (
