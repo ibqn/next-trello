@@ -1,7 +1,7 @@
 import type { Context } from "../utils/context"
 import { Hono } from "hono"
 import { zValidator } from "@hono/zod-validator"
-import type { SuccessResponse } from "database/src/types"
+import type { ApiResponse, SuccessResponse } from "database/src/types"
 import { HTTPException } from "hono/http-exception"
 import { signedIn } from "../middleware/signed-in"
 import { organizationSchema } from "database/src/validators/organization"
@@ -10,6 +10,7 @@ import {
   createOrganization,
   getOrganizationBySlug,
   getOrganizationsByUserId,
+  selectOrganization,
 } from "database/src/queries/organization"
 import type { Organization } from "database/src/drizzle/schema/organization"
 import { paramIdSchema } from "database/src/validators/param"
@@ -55,6 +56,17 @@ const organizationRoute = new Hono<Context>()
       message: "Organization found",
       data: organization,
     })
+  })
+  .post("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const { id: organizationId } = c.req.valid("param")
+    const user = c.get("user") as User
+
+    const organizationResponse = await selectOrganization({
+      userId: user.id,
+      organizationId,
+    })
+
+    return c.json<ApiResponse<Organization>>(organizationResponse)
   })
 
 export { organizationRoute }

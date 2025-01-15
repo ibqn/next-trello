@@ -22,6 +22,15 @@ export const getOrganizations = async () => {
   }
 }
 
+export const postSelectOrganization = async (organizationId: string): Promise<Organization | null> => {
+  const { data: response } = await axios.post<SuccessResponse<Organization>>(`/organization/${organizationId}`)
+  if (!response.success) {
+    return null
+  }
+  const { data: organization } = response
+  return organization
+}
+
 export const organizationListQueryOptions = () =>
   queryOptions({
     queryKey: ["organizations"] as const,
