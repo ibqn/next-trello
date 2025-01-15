@@ -29,21 +29,21 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
-    "sonner": "^1.7.1",
+    "sonner": "^1.7.2",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^22.10.5",
-    "@types/react": "^19.0.6",
+    "@types/node": "^22.10.6",
+    "@types/react": "^19.0.7",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.17",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
-    "postcss": "^8.4.35",
-    "prettier-plugin-tailwindcss": "^0.6.9",
+    "postcss": "^8.5.1",
+    "prettier-plugin-tailwindcss": "^0.6.10",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
