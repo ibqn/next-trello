@@ -1,6 +1,5 @@
-import { SignInForm } from "@/components/auth/sign-in-form"
+import { SelectOrgForm } from "@/components/auth/select-org-form"
 
-export default function SignInPage() {
-  return <SignInForm />
-  // return <div className="flex h-full items-center justify-center">SIGNIN</div>
+export default async function SelectOrgPage() {
+  return <SelectOrgForm />
 }
