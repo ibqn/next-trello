@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { organizationListQueryOptions, postSelectOrganization } from "@/api/organization"
+import { organizationListQueryOptions, organizationQueryOptions, postSelectOrganization } from "@/api/organization"
 import { userQueryOptions } from "@/api/auth"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -31,7 +31,10 @@ export function OrganizationSwitcher() {
   const { mutate: selectOrganization } = useMutation({
     mutationFn: postSelectOrganization,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["user"] })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: userQueryOptions().queryKey }),
+        queryClient.invalidateQueries({ queryKey: organizationQueryOptions().queryKey }),
+      ])
       toast("Organization changed successfully", { description: "Welcome back" })
     },
   })

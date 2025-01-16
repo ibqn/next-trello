@@ -33,7 +33,7 @@ export const postSelectOrganization = async (organizationId: string): Promise<Or
 
 export const organizationListQueryOptions = () =>
   queryOptions({
-    queryKey: ["organizations"] as const,
+    queryKey: ["organization-list"] as const,
     queryFn: getOrganizations,
   })
 
