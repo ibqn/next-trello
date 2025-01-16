@@ -42,6 +42,15 @@ const organizationRoute = new Hono<Context>()
       data: organizations,
     })
   })
+  .get("/current", signedIn, async (c) => {
+    const user = c.get("user") as User
+
+    return c.json<SuccessResponse<Organization | null>>({
+      success: true,
+      message: "Current Organization",
+      data: user.organization ?? null,
+    })
+  })
   .get("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
     const { id: slug } = c.req.valid("param")
 

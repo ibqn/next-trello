@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query"
 import { axios } from "./axios"
 import { Organization } from "database/src/drizzle/schema/organization"
-import { SuccessResponse } from "database/src/types"
+import { ApiResponse, SuccessResponse } from "database/src/types"
 import { OrganizationSchema } from "database/src/validators/organization"
 
 export const postOrganization = async (inputData: OrganizationSchema) => {
@@ -35,4 +35,24 @@ export const organizationListQueryOptions = () =>
   queryOptions({
     queryKey: ["organizations"] as const,
     queryFn: getOrganizations,
+  })
+
+export const getOrganization = async (): Promise<Organization | null> => {
+  try {
+    const { data: response } = await axios.get<ApiResponse<Organization>>(`/organization/current`)
+    if (!response.success) {
+      return null
+    }
+    const { data: organization } = response
+    return organization
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export const organizationQueryOptions = () =>
+  queryOptions({
+    queryKey: ["organization"] as const,
+    queryFn: getOrganization,
   })
