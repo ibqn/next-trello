@@ -6,7 +6,7 @@ type Props = {
 
 export default function DashboardLayout({ children }: Props) {
   return (
-    <div className="min-h-full">
+    <div className="flex min-h-full grow flex-col">
       <Navbar />
       {children}
     </div>
