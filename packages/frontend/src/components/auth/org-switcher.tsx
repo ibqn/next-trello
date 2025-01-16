@@ -14,31 +14,29 @@ import { Button } from "@/components/ui/button"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { organizationListQueryOptions, postSelectOrganization } from "@/api/organization"
 import { userQueryOptions } from "@/api/auth"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useEffect } from "react"
-import { Organization } from "database/src/drizzle/schema/organization"
 import { toast } from "sonner"
 import { getQueryClient } from "@/lib/query-client"
-import { Skeleton } from "../ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export function OrganizationSwitcher() {
   const { data: organizations } = useQuery(organizationListQueryOptions())
   const { data: user, isLoading: isUserLoading } = useQuery(userQueryOptions())
 
+  const router = useRouter()
+
   const queryClient = getQueryClient()
 
   const { mutate: selectOrganization } = useMutation({
     mutationFn: postSelectOrganization,
-    onSuccess: async (organization: Organization | null) => {
-      console.log("Select organization success")
-
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["user"] })
       toast("Organization changed successfully", { description: "Welcome back" })
     },
   })
 
   const { organizationSlug } = useParams()
-  console.log("organization", organizationSlug)
 
   useEffect(() => {
     const navigatedOrg = organizations?.find(({ slug }) => slug === organizationSlug)
@@ -75,7 +73,11 @@ export function OrganizationSwitcher() {
       >
         <DropdownMenuLabel className="text-xs text-muted-foreground">Organizations</DropdownMenuLabel>
         {organizations?.map((organization, index) => (
-          <DropdownMenuItem key={organization.id} onClick={() => {}} className="gap-2 p-2">
+          <DropdownMenuItem
+            key={organization.id}
+            onClick={() => router.push(`/organization/${organization.slug}`)}
+            className="gap-2 p-2"
+          >
             <div className="flex size-6 items-center justify-center rounded-sm border">
               <BuildingIcon className="size-4 shrink-0" />
             </div>
@@ -85,7 +87,7 @@ export function OrganizationSwitcher() {
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="gap-2 p-2">
+        <DropdownMenuItem className="gap-2 p-2" onClick={() => router.push("/create-org")}>
           <div className="flex size-6 items-center justify-center rounded-md border bg-background">
             <Plus className="size-4" />
           </div>
