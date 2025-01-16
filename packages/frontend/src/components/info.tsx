@@ -3,7 +3,7 @@
 import { organizationQueryOptions } from "@/api/organization"
 import { useQuery } from "@tanstack/react-query"
 import { BuildingIcon, CreditCardIcon } from "lucide-react"
-import { Skeleton } from "./ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export const Info = () => {
   const { data: organization, isLoading } = useQuery(organizationQueryOptions())
