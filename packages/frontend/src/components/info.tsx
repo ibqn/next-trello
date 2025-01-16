@@ -16,7 +16,7 @@ export const Info = () => {
 
       <div className="space-y-1">
         {isLoading ? (
-          <Skeleton className="h-7 w-24" />
+          <Skeleton className="h-7 w-32" />
         ) : (
           <p className="text-xl font-semibold capitalize">{organization?.name}</p>
         )}

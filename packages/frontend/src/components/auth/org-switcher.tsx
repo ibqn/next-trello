@@ -11,13 +11,42 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { useQuery } from "@tanstack/react-query"
-import { organizationListQueryOptions } from "@/api/organization"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { organizationListQueryOptions, postSelectOrganization } from "@/api/organization"
 import { userQueryOptions } from "@/api/auth"
+import { useParams } from "next/navigation"
+import { useEffect } from "react"
+import { Organization } from "database/src/drizzle/schema/organization"
+import { toast } from "sonner"
+import { getQueryClient } from "@/lib/query-client"
+import { Skeleton } from "../ui/skeleton"
 
 export function OrganizationSwitcher() {
   const { data: organizations } = useQuery(organizationListQueryOptions())
-  const { data: user } = useQuery(userQueryOptions())
+  const { data: user, isLoading: isUserLoading } = useQuery(userQueryOptions())
+
+  const queryClient = getQueryClient()
+
+  const { mutate: selectOrganization } = useMutation({
+    mutationFn: postSelectOrganization,
+    onSuccess: async (organization: Organization | null) => {
+      console.log("Select organization success")
+
+      await queryClient.invalidateQueries({ queryKey: ["user"] })
+      toast("Organization changed successfully", { description: "Welcome back" })
+    },
+  })
+
+  const { organizationSlug } = useParams()
+  console.log("organization", organizationSlug)
+
+  useEffect(() => {
+    const navigatedOrg = organizations?.find(({ slug }) => slug === organizationSlug)
+
+    if (navigatedOrg && user?.organization && user.organization.id !== navigatedOrg.id) {
+      selectOrganization(navigatedOrg.id)
+    }
+  }, [organizationSlug, organizations, user, selectOrganization])
 
   return (
     <DropdownMenu>
@@ -27,7 +56,12 @@ export function OrganizationSwitcher() {
             <BuildingIcon className="size-4" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold capitalize">{user?.organization?.name ?? ""}</span>
+            {isUserLoading ? (
+              <Skeleton className="h-4 w-24" />
+            ) : (
+              <span className="truncate font-semibold capitalize">{user?.organization?.name ?? ""}</span>
+            )}
+
             {/* <span className="truncate text-xs">basic</span> */}
           </div>
           <ChevronsUpDown className="ml-4" />
