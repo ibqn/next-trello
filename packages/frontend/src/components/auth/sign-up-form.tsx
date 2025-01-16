@@ -17,6 +17,7 @@ import { AxiosError } from "axios"
 import type { ApiResponse, ErrorResponse } from "database/src/types"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
+import unset from "lodash.unset"
 
 export const SignUpForm = () => {
   const router = useRouter()
@@ -60,10 +61,9 @@ export const SignUpForm = () => {
   })
 
   const handleSubmit = form.handleSubmit(async (data) => {
+    unset(data, "confirm")
     console.log(data)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { confirm: _, ...signupData } = data
-    signup(signupData)
+    signup(data)
   })
 
   const isDisabled = form.formState.isSubmitting

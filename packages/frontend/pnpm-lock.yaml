@@ -59,6 +59,9 @@ importers:
       database:
         specifier: workspace:*
         version: link:../database
+      lodash.unset:
+        specifier: ^4.5.2
+        version: 4.5.2
       lucide-react:
         specifier: ^0.471.1
         version: 0.471.1(react@19.0.0)
@@ -93,6 +96,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.2.0
+      '@types/lodash.unset':
+        specifier: ^4.5.9
+        version: 4.5.9
       '@types/node':
         specifier: ^22.10.7
         version: 22.10.7
@@ -803,6 +809,12 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+
+  '@types/lodash.unset@4.5.9':
+    resolution: {integrity: sha512-uyYP6JMM30vKXJtDrPtJyK/t3TdyjhZQ7woJAk1biI/o/sXZvBVqQtiMWsIlYLcn6jSPrG4sjYWTZM34qNM7dA==}
+
+  '@types/lodash@4.17.14':
+    resolution: {integrity: sha512-jsxagdikDiDBeIRaPYtArcT8my4tN1og7MtMRquFT3XNA6axxyHDRUemqDz/taRDdOUn0GnGHRCuff4q48sW9A==}
 
   '@types/node@22.10.7':
     resolution: {integrity: sha512-V09KvXxFiutGp6B7XkpaDXlNadZxrzajcY50EuoLIpQ6WWYCSvf19lVIazzfIzQvhUN2HjX12spLojTnhuKlGg==}
@@ -1662,6 +1674,9 @@ packages:
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
+
+  lodash.unset@4.5.2:
+    resolution: {integrity: sha512-bwKX88k2JhCV9D1vtE8+naDKlLiGrSmf8zi/Y9ivFHwbmRfA8RxS/aVJ+sIht2XOwqoNr4xUPUkGZpc1sHFEKg==}
 
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -2970,6 +2985,12 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
+  '@types/lodash.unset@4.5.9':
+    dependencies:
+      '@types/lodash': 4.17.14
+
+  '@types/lodash@4.17.14': {}
+
   '@types/node@22.10.7':
     dependencies:
       undici-types: 6.20.0
@@ -4043,6 +4064,8 @@ snapshots:
       p-locate: 5.0.0
 
   lodash.merge@4.6.2: {}
+
+  lodash.unset@4.5.2: {}
 
   loose-envify@1.4.0:
     dependencies:

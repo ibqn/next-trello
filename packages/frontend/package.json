@@ -26,6 +26,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "database": "workspace:*",
+    "lodash.unset": "^4.5.2",
     "lucide-react": "^0.471.1",
     "next": "15",
     "next-themes": "^0.4.4",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/lodash.unset": "^4.5.9",
     "@types/node": "^22.10.7",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19",
