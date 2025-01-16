@@ -12,6 +12,7 @@ import { sessionCookieName, getSessionCookieOptions } from "database/src/cookie"
 import { authRoute } from "./routes/auth"
 import { uploadRoute, fileRoute } from "./routes/uploads"
 import { organizationRoute } from "./routes/organization"
+import { boardRoute } from "./routes/board"
 
 const app = new Hono<Context>()
 
@@ -79,6 +80,7 @@ export const routes = app
   .route("/auth", authRoute)
   .route("/uploads", uploadRoute)
   .route("/organization", organizationRoute)
+  .route("/board", boardRoute)
 
 const port = 3333
 console.log(`Server is running on http://localhost:${port}`)

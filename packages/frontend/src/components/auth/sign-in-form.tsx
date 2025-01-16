@@ -8,8 +8,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { FormError } from "./form-error"
-import { FormSuccess } from "./form-success"
+import { FormError } from "@/components/forms/form-error"
+import { FormSuccess } from "@/components/forms/form-success"
 import Link from "next/link"
 import { useMutation } from "@tanstack/react-query"
 import { getQueryClient } from "@/lib/query-client"
@@ -17,10 +17,10 @@ import { postSignin } from "@/api/auth"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
-import { ErrorResponse, SuccessResponse } from "database/src/types"
+import { ApiResponse, ErrorResponse } from "database/src/types"
 
 export const SignInForm = () => {
-  const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
+  const [response, setResponse] = useState<ApiResponse | null>(null)
 
   const form = useForm<SigninSchema>({
     resolver: zodResolver(signinSchema),

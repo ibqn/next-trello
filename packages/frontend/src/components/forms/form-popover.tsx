@@ -2,7 +2,7 @@
 
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/utils/class-names"
-import { ComponentProps, PropsWithChildren } from "react"
+import { ComponentProps, PropsWithChildren, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -10,13 +10,44 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { boardSchema, BoardSchema } from "database/src/validators/board"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { FormSuccess } from "./form-success"
+import { FormError } from "./form-error"
+import { ApiResponse, ErrorResponse } from "database/src/types"
+import { AxiosError } from "axios"
+import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
+import { postBoard } from "@/api/board"
 
 type Props = ComponentProps<typeof PopoverContent> & PropsWithChildren
 
 export const FormPopover = ({ children, side = "bottom", sideOffset = 0, className, ...props }: Props) => {
+  const [response, setResponse] = useState<ApiResponse | null>(null)
   const form = useForm<BoardSchema>({ defaultValues: { title: "" }, resolver: zodResolver(boardSchema) })
 
   const isDisabled = form.formState.isSubmitting
+
+  const { mutate: createBoard } = useMutation({
+    mutationFn: postBoard,
+    onSuccess: async () => {
+      console.log("created board")
+      setResponse({ success: true, message: "Board created" })
+      toast("Create board Success", { description: "Board created" })
+    },
+    onError: (error) => {
+      let message = "Failed to create board"
+      if (error instanceof AxiosError) {
+        const response = error.response?.data as ErrorResponse
+        message = response.error
+      }
+      setResponse({ success: false, error: message })
+      toast("Create board failed", { description: message })
+    },
+  })
+
+  const handleSubmit = form.handleSubmit(async (data) => {
+    console.log(data)
+    createBoard(data)
+  })
 
   return (
     <Popover>
@@ -30,7 +61,7 @@ export const FormPopover = ({ children, side = "bottom", sideOffset = 0, classNa
         </PopoverClose>
 
         <Form {...form}>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -52,6 +83,9 @@ export const FormPopover = ({ children, side = "bottom", sideOffset = 0, classNa
                 )}
               />
             </div>
+
+            {response?.success && <FormSuccess message={response.message} />}
+            {response?.success === false && <FormError message={response.error} />}
 
             <Button type="submit" className="w-full" disabled={isDisabled}>
               Create board

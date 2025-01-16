@@ -20,6 +20,7 @@ import {
   roleTable,
   userRoleTable,
 } from "./schema/roles"
+import { boardTable } from "./schema/board"
 
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
@@ -44,5 +45,6 @@ export const db = drizzle(processEnv.DATABASE_URL, {
     rolePermission: rolePermissionTable,
     roleRelations,
     permissionRelations,
+    board: boardTable,
   },
 })
