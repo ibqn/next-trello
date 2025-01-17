@@ -19,6 +19,7 @@ import { useEffect } from "react"
 import { toast } from "sonner"
 import { getQueryClient } from "@/lib/query-client"
 import { Skeleton } from "@/components/ui/skeleton"
+import { boardListQueryOptions } from "@/api/board"
 
 export function OrganizationSwitcher() {
   const { data: organizations } = useQuery(organizationListQueryOptions())
@@ -34,6 +35,7 @@ export function OrganizationSwitcher() {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: userQueryOptions().queryKey }),
         queryClient.invalidateQueries({ queryKey: organizationQueryOptions().queryKey }),
+        queryClient.invalidateQueries({ queryKey: boardListQueryOptions().queryKey }),
       ])
       toast("Organization changed successfully", { description: "Welcome back" })
     },
