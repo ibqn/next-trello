@@ -10,6 +10,7 @@ import { boardSchema, BoardSchema } from "database/src/validators/board"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
 import { useUpdateBoard } from "@/hooks/use-update-board"
+import { cn } from "@/utils/class-names"
 
 type Props = {
   board?: Board | null
@@ -65,7 +66,10 @@ export const FormBoardTitle = ({ board, isLoading }: Props) => {
                       type="text"
                       placeholder="board title..."
                       disabled={isDisabled}
-                      className="h-7 w-64 border-none bg-transparent px-2 py-1 text-lg font-bold focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 md:text-lg"
+                      className={cn(
+                        "h-7 w-64 border-none bg-transparent px-2 py-1 text-lg font-bold",
+                        "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 md:text-lg"
+                      )}
                     />
                   </FormControl>
                   <FormMessage />
