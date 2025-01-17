@@ -1,6 +1,22 @@
 import { BoardList } from "@/components/board-list"
 import { Info } from "@/components/info"
 import { Separator } from "@/components/ui/separator"
+import { Metadata } from "next"
+import { getOrganizationBySlug } from "database/src/queries/organization"
+
+type Props = {
+  params: Promise<{
+    organizationSlug: string
+  }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { organizationSlug } = await params
+  const organization = await getOrganizationBySlug(organizationSlug)
+  const title = organization?.name ?? undefined
+
+  return { title }
+}
 
 export default function OrganizationIdPage() {
   return (

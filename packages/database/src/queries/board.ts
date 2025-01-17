@@ -3,6 +3,7 @@ import { db } from "../drizzle/db"
 import { boardTable, type Board } from "../drizzle/schema/board"
 import { errorResponse, successResponse } from "../utils/response"
 import type { BoardSchema } from "../validators/board"
+import { desc, eq } from "drizzle-orm"
 
 type CreateBoardOptions = BoardSchema & { user: User }
 
@@ -29,5 +30,24 @@ export const createBoard = async ({ user, ...board }: CreateBoardOptions) => {
   return successResponse<Board>(
     "Board created",
     newBoard satisfies Board as Board
+  )
+}
+
+type GetBoardsOptions = { user: User }
+
+export const getBoards = async ({ user }: GetBoardsOptions) => {
+  if (!user.organization?.id) {
+    return errorResponse("User is not associated with an organization")
+  }
+
+  const boards = await db
+    .select()
+    .from(boardTable)
+    .where(eq(boardTable.organizationId, user.organization.id))
+    .orderBy(desc(boardTable.createdAt))
+
+  return successResponse<Board[]>(
+    "Boards fetched",
+    boards satisfies Board[] as Board[]
   )
 }

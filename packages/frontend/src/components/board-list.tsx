@@ -1,8 +1,16 @@
+"use client"
+
 import { HelpCircleIcon, User2Icon } from "lucide-react"
 import { Hint } from "@/components/hint"
 import { FormPopover } from "@/components/forms/form-popover"
+import { useQuery } from "@tanstack/react-query"
+import { boardListQueryOptions } from "@/api/board"
+import Link from "next/link"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export const BoardList = () => {
+  const { data: boards, isLoading } = useQuery(boardListQueryOptions())
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-x-2 text-lg font-semibold text-neutral-700">
@@ -11,6 +19,18 @@ export const BoardList = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        {boards?.map((board) => (
+          <Link
+            key={board.id}
+            href={`/board/${board.id}`}
+            className="group relative aspect-video size-full overflow-hidden rounded-sm bg-sky-700 bg-cover bg-center bg-no-repeat p-2"
+          >
+            <div className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" />
+            <p className="relative font-semibold text-white">{board.title}</p>
+          </Link>
+        )) ??
+          (isLoading && Array.from({ length: 8 }, (_, i) => <Skeleton key={i} className="aspect-video size-full" />))}
+
         <FormPopover sideOffset={10} side="right">
           <div
             role="button"
