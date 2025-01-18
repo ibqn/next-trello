@@ -3,10 +3,11 @@
 import { boardQueryOptions } from "@/api/board"
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "next/navigation"
-import { GroupForm } from "./group-form"
+import { GroupForm } from "@/components/group/group-form"
 import { Group } from "database/src/drizzle/schema/group"
 import { useEffect, useState } from "react"
-import { GroupItem } from "./group-item"
+import { GroupItem } from "@/components/group/group-item"
+import { DragDropContext, Droppable } from "@hello-pangea/dnd"
 
 export const GroupContainer = () => {
   const { boardId } = useParams<{ boardId: string }>()
@@ -23,12 +24,19 @@ export const GroupContainer = () => {
   }, [board])
 
   return (
-    <ol className="flex flex-1 flex-row gap-3">
-      {groupData.map((group) => (
-        <GroupItem key={group.id} group={group} />
-      ))}
-      <GroupForm />
-      <div className="w-1 shrink-0" />
-    </ol>
+    <DragDropContext onDragEnd={() => {}}>
+      <Droppable droppableId="groups" type="group" direction="horizontal">
+        {(provided) => (
+          <ol {...provided.droppableProps} ref={provided.innerRef} className="flex flex-1 flex-row gap-3">
+            {groupData.map((group) => (
+              <GroupItem key={group.id} group={group} />
+            ))}
+            {provided.placeholder}
+            <GroupForm />
+            <div className="w-1 shrink-0" />
+          </ol>
+        )}
+      </Droppable>
+    </DragDropContext>
   )
 }
