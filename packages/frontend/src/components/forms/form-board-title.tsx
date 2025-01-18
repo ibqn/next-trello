@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
 import { useUpdateBoard } from "@/hooks/use-update-board"
 import { cn } from "@/utils/class-names"
+import { useClickOutside } from "@mantine/hooks"
 
 type Props = {
   board?: Board | null
@@ -25,6 +26,8 @@ export const FormBoardTitle = ({ board, isLoading }: Props) => {
     defaultValues: { title: board?.title ?? "" },
     mode: "onBlur",
   })
+
+  const ref = useClickOutside(() => setIsEditing(false))
 
   const isDisabled = form.formState.isSubmitting
 
@@ -54,7 +57,7 @@ export const FormBoardTitle = ({ board, isLoading }: Props) => {
     <>
       {isEditing ? (
         <Form {...form}>
-          <form className="flex flex-1" onSubmit={handleSubmit}>
+          <form ref={ref} className="flex flex-1" onSubmit={handleSubmit}>
             <FormField
               control={form.control}
               name="title"
