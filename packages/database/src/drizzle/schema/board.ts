@@ -3,6 +3,7 @@ import { schema } from "./schema"
 import { lifecycleDates } from "./utils"
 import { relations, type InferSelectModel } from "drizzle-orm"
 import { organizationTable } from "./organization"
+import { groupTable, type Group } from "./group"
 
 export const boardTable = schema.table("board", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -14,11 +15,14 @@ export const boardTable = schema.table("board", {
   ...lifecycleDates,
 })
 
-export const boardRelations = relations(boardTable, ({ one }) => ({
+export const boardRelations = relations(boardTable, ({ one, many }) => ({
   organization: one(organizationTable, {
     fields: [boardTable.organizationId],
     references: [organizationTable.id],
   }),
+  groups: many(groupTable),
 }))
 
-export type Board = InferSelectModel<typeof boardTable>
+export type Board = InferSelectModel<typeof boardTable> & {
+  groups?: Group[]
+}
