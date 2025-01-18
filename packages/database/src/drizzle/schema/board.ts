@@ -9,7 +9,7 @@ export const boardTable = schema.table("board", {
   id: uuid("id").primaryKey().defaultRandom(),
   organizationId: uuid("organization_id")
     .notNull()
-    .references(() => organizationTable.id),
+    .references(() => organizationTable.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
 
   ...lifecycleDates,

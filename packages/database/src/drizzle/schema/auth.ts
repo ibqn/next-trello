@@ -13,7 +13,8 @@ export const userTable = schema.table("user", {
   id: uuid("id").primaryKey().defaultRandom(),
   username: text("username").notNull().unique(),
   organizationId: uuid("organization_id").references(
-    () => organizationTable.id
+    () => organizationTable.id,
+    { onDelete: "set null" }
   ),
   passwordHash: text("password_hash").notNull(),
 
