@@ -4,7 +4,9 @@ import { boardTable, type Board } from "../drizzle/schema/board"
 import { errorResponse, successResponse } from "../utils/response"
 import type { BoardSchema } from "../validators/board"
 import { and, desc, eq } from "drizzle-orm"
-import type { ParamIdSchema } from "src/validators/param"
+import type { ParamIdSchema } from "../validators/param"
+import { groupTable, type Group } from "../drizzle/schema/group"
+import { aggregateOneToMany } from "./one-many"
 
 type CreateBoardOptions = BoardSchema & { user: User }
 
@@ -41,11 +43,30 @@ export const getBoards = async ({ user }: GetBoardsOptions) => {
     return errorResponse("User is not associated with an organization")
   }
 
-  const boards = await db
-    .select()
+  const rowData = await db
+    .select({ board: boardTable, groups: groupTable })
     .from(boardTable)
     .where(eq(boardTable.organizationId, user.organization.id))
-    .orderBy(desc(boardTable.createdAt))
+    .leftJoin(groupTable, eq(groupTable.boardId, boardTable.id))
+    .orderBy(desc(groupTable.order))
+
+  // const boards = Object.values(
+  //   rowData.reduce<Record<string, Board>>((acc, row) => {
+  //     const board = row.board as Board
+  //     const group = row.group as Group
+  //     if (!acc[board.id]) {
+  //       acc[board.id] = board
+  //       acc[board.id].groups = []
+  //     }
+
+  //     acc[board.id].groups!.push(group)
+
+  //     return acc
+  //   }, {})
+  // )
+  const boards = aggregateOneToMany(rowData, "board", "groups")
+
+  console.log(rowData)
 
   return successResponse<Board[]>(
     "Boards fetched",
@@ -60,8 +81,8 @@ export const getBoardById = async ({ id, user }: GetBoardByIdOptions) => {
     return errorResponse("User is not associated with an organization")
   }
 
-  const [board] = await db
-    .select()
+  const rowData = await db
+    .select({ board: boardTable, groups: groupTable })
     .from(boardTable)
     .where(
       and(
@@ -69,6 +90,9 @@ export const getBoardById = async ({ id, user }: GetBoardByIdOptions) => {
         eq(boardTable.id, id)
       )
     )
+    .leftJoin(groupTable, eq(groupTable.boardId, boardTable.id))
+
+  const [board] = aggregateOneToMany(rowData, "board", "groups")
 
   if (!board) {
     return errorResponse("Board not found")
