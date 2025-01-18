@@ -52,3 +52,12 @@ export const patchBoard = async ({ id, ...inputData }: ParamIdSchema & BoardSche
   const { data: board } = response
   return board
 }
+
+export const deleteBoard = async ({ id }: ParamIdSchema): Promise<Board | null> => {
+  const { data: response } = await axios.delete<ApiResponse<Board>>(`/board/${id}`)
+  if (!response.success) {
+    return null
+  }
+  const { data: board } = response
+  return board
+}

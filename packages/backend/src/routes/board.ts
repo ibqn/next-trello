@@ -5,6 +5,7 @@ import { zValidator } from "@hono/zod-validator"
 import { boardSchema } from "database/src/validators/board"
 import {
   createBoard,
+  deleteBoard,
   getBoardById,
   getBoards,
   updateBoard,
@@ -49,5 +50,12 @@ const boardRoute = new Hono<Context>()
       return c.json<ApiResponse<Board>>(response)
     }
   )
+  .delete("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const user = c.get("user") as User
+    const { id } = c.req.valid("param")
+
+    const response = await deleteBoard({ id, user })
+    return c.json<ApiResponse<Board>>(response)
+  })
 
 export { boardRoute }

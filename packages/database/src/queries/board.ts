@@ -114,3 +114,36 @@ export const updateBoard = async ({
     updatedBoard satisfies Board as Board
   )
 }
+
+type DeleteBoardOptions = ParamIdSchema & { user: User }
+
+export const deleteBoard = async ({ id, user }: DeleteBoardOptions) => {
+  if (!user.organization?.id) {
+    return errorResponse("User is not associated with an organization")
+  }
+
+  const [deletedBoard] = await db
+    .delete(boardTable)
+    .where(
+      and(
+        eq(boardTable.organizationId, user.organization.id),
+        eq(boardTable.id, id)
+      )
+    )
+    .returning({
+      id: boardTable.id,
+      title: boardTable.title,
+      organizationId: boardTable.organizationId,
+      createdAt: boardTable.createdAt,
+      updatedAt: boardTable.updatedAt,
+    })
+
+  if (!deletedBoard) {
+    return errorResponse("Failed to delete board")
+  }
+
+  return successResponse<Board>(
+    "Board deleted",
+    deletedBoard satisfies Board as Board
+  )
+}

@@ -14,9 +14,9 @@ import { FormSuccess } from "./form-success"
 import { FormError } from "./form-error"
 import { ApiResponse, ErrorResponse } from "database/src/types"
 import { AxiosError } from "axios"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { postBoard } from "@/api/board"
+import { boardListQueryOptions, postBoard } from "@/api/board"
 
 type Props = ComponentProps<typeof PopoverContent> & PropsWithChildren
 
@@ -26,10 +26,13 @@ export const FormPopover = ({ children, side = "bottom", sideOffset = 0, classNa
 
   const isDisabled = form.formState.isSubmitting
 
+  const queryClient = useQueryClient()
+
   const { mutate: createBoard } = useMutation({
     mutationFn: postBoard,
     onSuccess: async () => {
       console.log("created board")
+      await queryClient.invalidateQueries({ queryKey: boardListQueryOptions().queryKey })
       setResponse({ success: true, message: "Board created" })
       toast("Create board Success", { description: "Board created" })
     },
