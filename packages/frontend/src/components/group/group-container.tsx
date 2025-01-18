@@ -28,8 +28,8 @@ export const GroupContainer = () => {
       <Droppable droppableId="groups" type="group" direction="horizontal">
         {(provided) => (
           <ol {...provided.droppableProps} ref={provided.innerRef} className="flex flex-1 flex-row gap-3">
-            {groupData.map((group) => (
-              <GroupItem key={group.id} group={group} />
+            {groupData.map((group, index) => (
+              <GroupItem key={group.id} group={group} index={index} />
             ))}
             {provided.placeholder}
             <GroupForm />
