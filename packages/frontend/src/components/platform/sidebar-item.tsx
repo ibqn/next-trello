@@ -36,7 +36,7 @@ export const SidebarItem = ({ organization, setExpanded, isActive, isExpanded }:
           <div className="relative size-7">
             <Building2Icon />
           </div>
-          <span className="text-sm font-medium">{organization.name}</span>
+          <span className="text-sm font-medium capitalize">{organization.name}</span>
         </div>
       </AccordionTrigger>
 
