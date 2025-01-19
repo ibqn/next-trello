@@ -37,7 +37,7 @@ export const GroupForm = () => {
     <GroupWrapper>
       {isEditing ? (
         <Form {...form}>
-          <form ref={ref} onSubmit={handleSubmit} className="w-full space-y-4 rounded-md bg-white p-4 shadow-md">
+          <form ref={ref} onSubmit={handleSubmit} className="w-full space-y-4 rounded-md bg-[#f1f2f4] p-4 shadow-md">
             <FormField
               control={form.control}
               name="title"
@@ -71,7 +71,7 @@ export const GroupForm = () => {
       ) : (
         <Button
           variant="secondary"
-          className="flex w-full flex-row items-center justify-start rounded-md bg-white/80 p-3 text-sm font-medium transition hover:bg-white/50"
+          className="flex w-full flex-row items-center justify-start rounded-md bg-[#f1f2f4] p-3 text-sm font-medium transition hover:bg-[#f1f2f4]/80"
           onClick={enableEditing}
         >
           <PlusIcon className="size-4" />
