@@ -23,10 +23,10 @@ export const BoardList = () => {
           <Link
             key={board.id}
             href={`/board/${board.id}`}
-            className="group relative aspect-video size-full overflow-hidden rounded-sm bg-sky-700 bg-cover bg-center bg-no-repeat p-2"
+            className="group relative aspect-video size-full overflow-hidden rounded-sm bg-cover bg-center bg-no-repeat p-2"
           >
-            <div className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" />
-            <p className="relative font-semibold text-white">{board.title}</p>
+            <div className="absolute inset-0 bg-sky-500/10 transition group-hover:bg-sky-500/40" />
+            <p className="relative font-semibold text-sky-700/90 hover:text-sky-700">{board.title}</p>
           </Link>
         )) ??
           (isLoading && Array.from({ length: 8 }, (_, i) => <Skeleton key={i} className="aspect-video size-full" />))}

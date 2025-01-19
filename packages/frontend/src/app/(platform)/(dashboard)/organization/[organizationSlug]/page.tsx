@@ -1,4 +1,4 @@
-import { BoardList } from "@/components/board-list"
+import { BoardList } from "@/components/board/board-list"
 import { Info } from "@/components/info"
 import { Separator } from "@/components/ui/separator"
 import { Metadata } from "next"
