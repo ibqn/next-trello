@@ -10,8 +10,12 @@ import { Accordion } from "@/components/ui/accordion"
 import { SidebarItem } from "@/components/platform/sidebar-item"
 import { Skeleton } from "@/components/ui/skeleton"
 
-export const Sidebar = () => {
-  const [expanded, setExpanded] = useLocalStorage<Record<string, boolean>>({ key: "sidebar-state", defaultValue: {} })
+type Props = {
+  storageKey: string
+}
+
+export const Sidebar = ({ storageKey }: Props) => {
+  const [expanded, setExpanded] = useLocalStorage<Record<string, boolean>>({ key: storageKey, defaultValue: {} })
 
   const { data: selectedOrganization, isLoading: isOrganizationLoading } = useQuery(organizationQueryOptions())
   const { data: organizationList, isLoading: isOrganizationListLoading } = useQuery(organizationListQueryOptions())
