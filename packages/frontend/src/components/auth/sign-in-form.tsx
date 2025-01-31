@@ -11,8 +11,7 @@ import { useState } from "react"
 import { FormError } from "@/components/forms/form-error"
 import { FormSuccess } from "@/components/forms/form-success"
 import Link from "next/link"
-import { useMutation } from "@tanstack/react-query"
-import { getQueryClient } from "@/lib/query-client"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postSignin } from "@/api/auth"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AxiosError } from "axios"
@@ -34,7 +33,7 @@ export const SignInForm = () => {
   const searchParams = useSearchParams()
   const redirect = searchParams.get("redirect") ?? "/"
 
-  const queryClient = getQueryClient()
+  const queryClient = useQueryClient()
 
   const { mutate: signin } = useMutation({
     mutationFn: postSignin,
