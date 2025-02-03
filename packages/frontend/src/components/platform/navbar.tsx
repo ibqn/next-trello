@@ -4,7 +4,7 @@ import { Plus } from "lucide-react"
 import { UserButton } from "@/components/auth/user-button"
 import { OrganizationSwitcher } from "@/components/auth/org-switcher"
 import { MobileSidebar } from "@/components/platform/mobile-sidebar"
-import { ThemeToggle } from "../theme-toggle"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export const Navbar = () => {
   return (
