@@ -27,8 +27,6 @@ export const FormBoardTitle = ({ board, isLoading }: Props) => {
     mode: "onBlur",
   })
 
-  const ref = useClickOutside(() => setIsEditing(false))
-
   const isDisabled = form.formState.isSubmitting
 
   const { mutate: updateBoard } = useUpdateBoard()
@@ -49,6 +47,8 @@ export const FormBoardTitle = ({ board, isLoading }: Props) => {
     updateBoard({ id, ...data }, { onSuccess: () => setIsEditing(false) })
   })
 
+  const ref = useClickOutside(() => handleSubmit())
+
   useEffect(() => {
     form.setValue("title", board?.title ?? "")
   }, [board, form])
@@ -57,7 +57,7 @@ export const FormBoardTitle = ({ board, isLoading }: Props) => {
     <>
       {isEditing ? (
         <Form {...form}>
-          <form ref={ref} className="flex flex-1" onSubmit={handleSubmit}>
+          <form ref={ref} className="flex flex-1" onBlur={handleSubmit} onSubmit={handleSubmit}>
             <FormField
               control={form.control}
               name="title"
