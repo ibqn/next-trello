@@ -4,6 +4,7 @@ import { Plus } from "lucide-react"
 import { UserButton } from "@/components/auth/user-button"
 import { OrganizationSwitcher } from "@/components/auth/org-switcher"
 import { MobileSidebar } from "@/components/platform/mobile-sidebar"
+import { ThemeToggle } from "../theme-toggle"
 
 export const Navbar = () => {
   return (
@@ -23,6 +24,7 @@ export const Navbar = () => {
         </Button>
 
         <div className="ml-auto flex items-center gap-4">
+          <ThemeToggle />
           <OrganizationSwitcher />
           <UserButton />
         </div>
