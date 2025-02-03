@@ -13,9 +13,11 @@ import { authRoute } from "./routes/auth"
 import { uploadRoute, fileRoute } from "./routes/uploads"
 import { organizationRoute } from "./routes/organization"
 import { boardRoute } from "./routes/board"
+import { logger } from "hono/logger"
 
 const app = new Hono<Context>()
 
+app.use(logger())
 app.use(prettyJSON())
 
 app.notFound((c) =>
