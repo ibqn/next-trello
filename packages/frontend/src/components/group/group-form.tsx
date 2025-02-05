@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { groupSchema, GroupSchema } from "database/src/validators/group"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useParams } from "next/navigation"
+import { useCreateGroup } from "@/hooks/use-create-group"
 
 export const GroupForm = () => {
   const [isEditing, setIsEditing] = useState(false)
@@ -27,10 +28,13 @@ export const GroupForm = () => {
     })
   }
 
+  const { mutate: createGroup } = useCreateGroup()
+
   const isDisabled = form.formState.isSubmitting
 
   const handleSubmit = form.handleSubmit((data) => {
     console.log(data)
+    createGroup(data, { onSuccess: () => setIsEditing(false) })
   })
 
   return (
