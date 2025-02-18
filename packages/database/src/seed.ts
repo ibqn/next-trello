@@ -53,11 +53,15 @@ async function seed() {
     .onConflictDoNothing()
     .returning({ id: permissionTable.id })
 
+  console.log(`${permissionResult.length} permission item(s) inserted.`)
+
   const roleResult = await db
     .insert(roleTable)
     .values(roles.map((name) => ({ name })))
     .onConflictDoNothing()
     .returning({ id: roleTable.id, name: roleTable.name })
+
+  console.log(`${roleResult.length} role item(s) inserted.`)
 
   const [adminRole] = await db
     .select({ id: roleTable.id })
@@ -79,21 +83,24 @@ async function seed() {
       roleId: rolePermissionTable.roleId,
       permissionId: rolePermissionTable.permissionId,
     })
+  console.log(`${adminPermissionsResult.length} admin permission(s) inserted.`)
 
   const [user] = await db
     .select({ id: userTable.id })
     .from(userTable)
     .where(eq(userTable.username, "ibqn"))
 
-  const userRoleResult = await db.insert(userRoleTable).values({
-    userId: user.id,
-    roleId: adminRole.id,
-  })
+  const userRoleResult = await db
+    .insert(userRoleTable)
+    .values({
+      userId: user.id,
+      roleId: adminRole.id,
+    })
+    .onConflictDoNothing()
+    .returning()
+  console.log(`${userRoleResult.length} use role item(s) inserted.`)
 
   const end = Date.now()
-  console.log(`${permissionResult.length} permission item(s) inserted.`)
-  console.log(`${roleResult.length} role item(s) inserted.`)
-  console.log(`${adminPermissionsResult.length} admin permission(s) inserted.`)
   console.log(`Completed in ${end - start}ms.`)
 }
 
