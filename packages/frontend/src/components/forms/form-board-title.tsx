@@ -71,7 +71,7 @@ export const FormBoardTitle = ({ board, isLoading }: Props) => {
                       disabled={isDisabled}
                       className={cn(
                         "h-7 w-64 border-none bg-transparent px-2 py-1 text-lg font-bold",
-                        "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 md:text-lg"
+                        "focus-visible:outline-hidden focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 md:text-lg"
                       )}
                     />
                   </FormControl>

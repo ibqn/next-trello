@@ -6,13 +6,13 @@ export default function MarketingPage() {
   return (
     <div className="flex grow flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center">
-        <div className="mb-4 flex flex-row gap-x-2 rounded-full border bg-amber-100 p-4 uppercase text-amber-700 shadow-sm">
+        <div className="mb-4 flex flex-row gap-x-2 rounded-full border bg-amber-100 p-4 uppercase text-amber-700 shadow-xs">
           <Medal className="h-6 w-6" />
           <span>No 1 task management</span>
         </div>
 
         <h1 className="mb-6 text-center text-3xl text-neutral-600 md:text-6xl">Taskify helps team move</h1>
-        <div className="w-fit rounded-md bg-gradient-to-r from-fuchsia-600 to-pink-600 px-4 py-2 pb-4 text-3xl text-white md:text-6xl">
+        <div className="w-fit rounded-md bg-linear-to-r from-fuchsia-600 to-pink-600 px-4 py-2 pb-4 text-3xl text-white md:text-6xl">
           work forward.
         </div>
       </div>
